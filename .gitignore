@@ -1,0 +1,18 @@
+# PHP dependencies
+vendor/
+
+# Environment variables
+.env
+
+# Firebase service account
+firebase-service-account.json
+
+# Logs
+storage/logs/
+*.log
+
+# Composer lock (tuỳ chọn)
+# composer.lock
+
+# VSCode settings
+.vscode/

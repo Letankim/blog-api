@@ -1,0 +1,147 @@
+[33mcommit 0d644eea800098388f6fddf828534930a8f9e360[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Tan Kim <letankim2003@gmail.com>
+Date:   Sun Nov 30 22:41:33 2025 +0700
+
+    update code api
+
+ .env                          | 45 [31m-------------------------------------------[m
+ firebase-service-account.json | 13 [31m-------------[m
+ 2 files changed, 58 deletions(-)
+
+[33mcommit 3af67046cac5e3f70fd5966dea574433b6583d5b[m
+Author: Tan Kim <letankim2003@gmail.com>
+Date:   Sun Nov 30 22:40:35 2025 +0700
+
+    update code
+
+ .gitignore | 18 [32m+++++++++++++++++[m[31m-[m
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+[33mcommit ae7d2aa676cfd4268c76bd5ad4617e449e601a40[m
+Author: Tan Kim <letankim2003@gmail.com>
+Date:   Sun Nov 30 22:33:05 2025 +0700
+
+    first commit
+
+ .gitignore | 3 [32m++[m[31m-[m
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+[33mcommit d7483d5f25a2eac506781d9a31b6fca4e6d0f5e3[m
+Author: Tan Kim <letankim2003@gmail.com>
+Date:   Sun Nov 30 22:31:53 2025 +0700
+
+    first commit1
+
+ .env                    | 7 [32m++++++[m[31m-[m
+ src/config/settings.php | 6 [32m+++[m[31m---[m
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
+[33mcommit e89fedf6882170f2e106f9dd2b33fa815c5fa048[m
+Author: Tan Kim <letankim2003@gmail.com>
+Date:   Sun Nov 30 22:28:45 2025 +0700
+
+    first commit
+
+ .env                                               |   40 [32m+[m
+ .gitignore                                         |    1 [32m+[m
+ ...onal_Blog_Shop_API_Full.postman_collection.json |  469 [32m+++[m
+ composer.json                                      |   29 [32m+[m
+ composer.lock                                      | 3948 [32m++++++++++++++++++++[m
+ firebase-service-account.json                      |   13 [32m+[m
+ index.php                                          |    3 [32m+[m
+ logs/app.log                                       |   57 [32m+[m
+ personal_blog_shop.sql                             |  930 [32m+++++[m
+ personal_blog_shop_final.sql                       | 1167 [32m++++++[m
+ personal_blog_shopv2.sql                           |  935 [32m+++++[m
+ public/.htaccess                                   |    4 [32m+[m
+ public/index.php                                   |   30 [32m+[m
+ .../products/20251101_034718_05c00a93980a05d7.png  |  Bin [31m0[m -> [32m345255[m bytes
+ .../products/20251101_034829_7d38acc046c2626e.png  |  Bin [31m0[m -> [32m345255[m bytes
+ .../products/20251102_151644_df87d5aafcb5ad79.jpg  |  Bin [31m0[m -> [32m93674[m bytes
+ .../products/20251102_151653_814c78a9eeef92bb.jpg  |  Bin [31m0[m -> [32m93674[m bytes
+ .../products/20251102_152034_3f2f2a774ca90bc7.jpg  |  Bin [31m0[m -> [32m93674[m bytes
+ .../products/20251102_152230_808bde7bf2b8dcc1.jpg  |  Bin [31m0[m -> [32m93674[m bytes
+ .../products/20251102_152346_7c96d460635376db.jpg  |  Bin [31m0[m -> [32m93674[m bytes
+ .../products/20251102_220720_d47e13a1accaf49c.png  |  Bin [31m0[m -> [32m1098065[m bytes
+ .../products/20251102_220727_9afdf1c2bdd01a1f.png  |  Bin [31m0[m -> [32m1098065[m bytes
+ .../products/20251103_095415_345a399047217fbd.png  |  Bin [31m0[m -> [32m27092[m bytes
+ src/Enums/NotificationType.php                     |   25 [32m+[m
+ src/Validation/ValidationRules.php                 |  148 [32m+[m
+ src/config/database.php                            |   45 [32m+[m
+ src/config/dependencies.php                        |   32 [32m+[m
+ src/config/settings.php                            |  176 [32m+[m
+ src/controllers/ActivationKeyController.php        |  265 [32m++[m
+ src/controllers/BagrController.php                 |   88 [32m+[m
+ src/controllers/ChatController.php                 |   74 [32m+[m
+ src/controllers/CommentController.php              |  182 [32m+[m
+ src/controllers/DashboardController.php            |  116 [32m+[m
+ src/controllers/MaterialController.php             |  195 [32m+[m
+ src/controllers/NotificationController.php         |  104 [32m+[m
+ src/controllers/OrderController.php                |  298 [32m++[m
+ src/controllers/PasskeyController.php              |  156 [32m+[m
+ src/controllers/PostCategoryController.php         |  131 [32m+[m
+ src/controllers/PostController.php                 |  121 [32m+[m
+ src/controllers/PostLikeController.php             |   96 [32m+[m
+ src/controllers/ProductCategoryController.php      |  131 [32m+[m
+ src/controllers/ProductController.php              |   98 [32m+[m
+ src/controllers/ReviewController.php               |  189 [32m+[m
+ src/controllers/ReviewReplyController.php          |  114 [32m+[m
+ src/controllers/SiteSettingController.php          |  163 [32m+[m
+ src/controllers/TagController.php                  |  127 [32m+[m
+ src/controllers/UploadController.php               |  220 [32m++[m
+ src/controllers/UserController.php                 |  449 [32m+++[m
+ src/controllers/VoucherController.php              |  154 [32m+[m
+ src/middleware/AuthMiddleware.php                  |   86 [32m+[m
+ src/middleware/CorsMiddleware.php                  |   23 [32m+[m
+ src/middleware/ErrorHandler.php                    |  129 [32m+[m
+ src/models/ActivationKeyModel.php                  |  406 [32m++[m
+ src/models/BagrModel.php                           |  140 [32m+[m
+ src/models/BaseModel.php                           |  358 [32m++[m
+ src/models/ChatSessionModel.php                    |   36 [32m+[m
+ src/models/CommentModel.php                        |  147 [32m+[m
+ src/models/DashboardModel.php                      |  464 [32m+++[m
+ src/models/MaterialModel.php                       |  143 [32m+[m
+ src/models/NotificationModel.php                   |   64 [32m+[m
+ src/models/OrderModel.php                          |  953 [32m+++++[m
+ src/models/PasskeyModel.php                        |  313 [32m++[m
+ src/models/PostCategoryModel.php                   |   97 [32m+[m
+ src/models/PostImageModel.php                      |   18 [32m+[m
+ src/models/PostLikeModel.php                       |   57 [32m+[m
+ src/models/PostModel.php                           |  335 [32m++[m
+ src/models/PostTagModel.php                        |   26 [32m+[m
+ src/models/ProductCategoryModel.php                |   99 [32m+[m
+ src/models/ProductModel.php                        |  291 [32m++[m
+ src/models/ReviewModel.php                         |  156 [32m+[m
+ src/models/ReviewReplyModel.php                    |   56 [32m+[m
+ src/models/SiteSettingModel.php                    |  136 [32m+[m
+ src/models/TagModel.php                            |   36 [32m+[m
+ src/models/UserModel.php                           |  494 [32m+++[m
+ src/models/VoucherModel.php                        |  110 [32m+[m
+ src/routes/api.php                                 |   23 [32m+[m
+ src/routes/v1/activation_keys.php                  |   27 [32m+[m
+ src/routes/v1/bagr.php                             |   10 [32m+[m
+ src/routes/v1/chatAI.php                           |    7 [32m+[m
+ src/routes/v1/comments.php                         |   12 [32m+[m
+ src/routes/v1/dashboard.php                        |   17 [32m+[m
+ src/routes/v1/likes.php                            |    9 [32m+[m
+ src/routes/v1/materials.php                        |   14 [32m+[m
+ src/routes/v1/notifications.php                    |   10 [32m+[m
+ src/routes/v1/orders.php                           |   17 [32m+[m
+ src/routes/v1/passkey.php                          |   13 [32m+[m
+ src/routes/v1/post-categories.php                  |   12 [32m+[m
+ src/routes/v1/posts.php                            |   12 [32m+[m
+ src/routes/v1/product-categories.php               |   12 [32m+[m
+ src/routes/v1/products.php                         |   11 [32m+[m
+ src/routes/v1/review_replies.php                   |   10 [32m+[m
+ src/routes/v1/reviews.php                          |   26 [32m+[m
+ src/routes/v1/site_settings.php                    |   19 [32m+[m
+ src/routes/v1/tags.php                             |   11 [32m+[m
+ src/routes/v1/upload.php                           |    8 [32m+[m
+ src/routes/v1/users.php                            |   33 [32m+[m
+ src/routes/v1/vouchers.php                         |   12 [32m+[m
+ src/services/AIService.php                         |  367 [32m++[m
+ src/services/NotificationService.php               |  179 [32m+[m
+ src/services/PayOSService.php                      |  104 [32m+[m
+ src/services/mailService.php                       |   86 [32m+[m
+ src/templates/EmailTemplate.php                    |  180 [32m+[m
+ 102 files changed, 17937 insertions(+)

@@ -1,0 +1,29 @@
+{
+  "require": {
+    "php": ">=8.1",
+    "slim/slim": "^4.0",
+    "slim/psr7": "^1.7",
+    "php-di/php-di": "^7.0",
+    "firebase/php-jwt": "^6.0",
+    "respect/validation": "^2.2",
+    "monolog/monolog": "^3.0",
+    "vlucas/phpdotenv": "^5.6",
+    "phpmailer/phpmailer": "^7.0",
+    "payos/payos": "^1.0",
+    "guzzlehttp/psr7": "^2.8",
+    "cloudinary/cloudinary_php": "^3.1",
+    "league/oauth2-client": "^2.9",
+    "league/oauth2-google": "^4.0",
+    "kreait/firebase-php": "^7.23",
+    "guzzlehttp/guzzle": "^7.10",
+    "lbuchs/webauthn": "^2.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "scripts": {
+    "start": "php -S localhost:8000 -t public public/index.php"
+  }
+}

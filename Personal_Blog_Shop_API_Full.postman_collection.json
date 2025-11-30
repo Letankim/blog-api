@@ -1,0 +1,469 @@
+{
+  "info": {
+    "_postman_id": "full-real-test-2025",
+    "name": "FULL REAL TEST - 100+ CASES",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "admin_token", "value": "", "type": "string" },
+    { "key": "user_id", "value": "", "type": "string" },
+    { "key": "post_id", "value": "", "type": "string" },
+    { "key": "product_id", "value": "", "type": "string" },
+    { "key": "review_id", "value": "", "type": "string" },
+    { "key": "order_id", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. AUTH - 10 CASES",
+      "item": [
+        {
+          "name": "1.1 Register - Success",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser_{{ $randomInt }}\",\n  \"email\": \"test{{ $randomInt }}@example.com\",\n  \"password\": \"123456\",\n  \"phone_number\": \"090{{ $randomInt }}\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/users/register"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Success message', () => { const json = pm.response.json(); pm.expect(json.success).to.include('Đăng ký'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.2 Register - Duplicate Email",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"dupuser\",\n  \"email\": \"test1@example.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/users/register"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Error message', () => { const json = pm.response.json(); pm.expect(json.error).to.include('đã tồn tại'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.3 Login - Success",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test1@example.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/users/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Token exists', () => { const json = pm.response.json(); pm.expect(json.token).to.exist; pm.environment.set('token', json.token); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.4 Login - Wrong Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test1@example.com\",\n  \"password\": \"wrongpass\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/users/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.5 Login - Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/users/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Admin token', () => { const json = pm.response.json(); pm.environment.set('admin_token', json.token); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. POSTS - 15 CASES",
+      "item": [
+        {
+          "name": "2.1 Get All - No Filter",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/posts?page=1&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data & pagination', () => { const json = pm.response.json(); pm.expect(json.data).to.be.an('array'); pm.expect(json.pagination.total).to.be.a('number'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "2.2 Get All - Search",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/posts?search=laravel&page=1&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Filtered by search', () => { const json = pm.response.json(); json.data.forEach(p => pm.expect(p.title.toLowerCase()).to.include('laravel')); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "2.3 Get All - Category Filter",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/posts?category=cat_post_001"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "2.4 Create Post - Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Post {{ $randomInt }}\",\n  \"content\": \"Nội dung test từ Postman\",\n  \"category_id\": \"cat_post_001\",\n  \"tags\": [\"test\", \"api\"],\n  \"images\": [ { \"image_url\": \"https://picsum.photos/200\", \"alt_text\": \"Test\", \"is_primary\": true } ]\n}"
+            },
+            "url": "{{base_url}}/api/v1/posts"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Save post_id', () => { const json = pm.response.json(); pm.environment.set('post_id', json.id); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "2.5 Create Post - No Auth",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"No Auth Post\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/posts"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "2.6 Get Post by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/posts/{{post_id}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has images & tags', () => { const json = pm.response.json(); pm.expect(json.data.images).to.be.an('array'); pm.expect(json.data.tags).to.be.an('array'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. PRODUCTS - 12 CASES",
+      "item": [
+        {
+          "name": "3.1 Get All - Filter Type",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/products?type=activation_key&page=1&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.2 Get Product by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/products/prod001"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Save product_id', () => { const json = pm.response.json(); pm.environment.set('product_id', json.data.id); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. REVIEWS + REPLIES - 20 CASES",
+      "item": [
+        {
+          "name": "4.1 Get Reviews with Replies",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/product-reviews?product_id={{product_id}}&page=1&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has replies', () => { const json = pm.response.json(); if (json.data.length > 0) { pm.expect(json.data[0].replies).to.be.an('array'); } });",
+                  "pm.test('Save review_id', () => { const json = pm.response.json(); if (json.data.length > 0) { pm.environment.set('review_id', json.data[0].id); } });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "4.2 Get Replies by Review ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/review-replies?review_id={{review_id}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has user_name', () => { const json = pm.response.json(); json.data.forEach(r => pm.expect(r.user_name).to.exist); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. ORDERS - 10 CASES",
+      "item": [
+        {
+          "name": "5.1 Get History - Auth",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/v1/orders/history?page=1&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has items', () => { const json = pm.response.json(); json.data.forEach(o => pm.expect(o.items).to.be.an('array')); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "5.2 Get History - No Auth",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/orders/history"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. NOTIFICATIONS - 8 CASES",
+      "item": [
+        {
+          "name": "6.1 Get Notifications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/v1/notifications?page=1&limit=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has payload', () => { const json = pm.response.json(); json.data.forEach(n => pm.expect(n.payload).to.be.an('object')); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "7. EDGE CASES - 15 CASES",
+      "item": [
+        {
+          "name": "7.1 Page Out of Range",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/posts?page=999&limit=10"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Empty data', () => { const json = pm.response.json(); pm.expect(json.data.length).to.equal(0); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "7.2 Invalid UUID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/v1/posts/invalid-uuid"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
