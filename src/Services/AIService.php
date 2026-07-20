@@ -6,7 +6,7 @@ use App\Models\OrderModel;
 use App\Models\UserModel;
 use App\Models\ChatSessionModel;
 use App\Models\VoucherModel;
-use App\Config\settings;
+use App\Config\Settings;
 use GuzzleHttp\Client;
 
 class AIService

@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Respect\Validation\Validator as v;
 use Firebase\JWT\JWT;
-use App\Config\settings;
+use App\Config\Settings;
 use App\Services\MailService;
 use PDO;
 use PDOStatement;

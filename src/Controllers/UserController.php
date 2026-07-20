@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Config\settings;
+use App\Config\Settings;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\UserModel;

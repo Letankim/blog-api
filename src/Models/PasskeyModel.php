@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Config\settings;
+use App\Config\Settings;
 use Exception;
 use Firebase\JWT\JWT;
 use lbuchs\WebAuthn\WebAuthn;

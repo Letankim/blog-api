@@ -3,7 +3,7 @@ namespace App\Services;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use App\Templates\EmailTemplate;
-use App\Config\settings;
+use App\Config\Settings;
 
 class MailService
 {

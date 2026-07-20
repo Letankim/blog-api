@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-use App\Config\settings;
+use App\Config\Settings;
 use App\Services\NotificationService;
 use App\Services\PayOSService;
 use PDO;
