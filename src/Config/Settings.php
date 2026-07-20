@@ -14,7 +14,7 @@ class Settings
         }
 
         $envFile = __DIR__ . '/../../.env';
-        $env = [];
+        $env = $_ENV;
 
         if (file_exists($envFile)) {
             try {
@@ -26,6 +26,15 @@ class Settings
             }
         } else {
             error_log("Settings: File .env không tồn tại tại: $envFile");
+        }
+
+        // Load OS environment variables (Render injects them here if .env is absent and $_ENV is empty)
+        $keysToCheck = ['APP_URL', 'APP_ENV', 'JWT_SECRET', 'LOG_LEVEL', 'DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_CHARSET', 'ABLE_API_KEY', 'MAIL_HOST', 'MAIL_USERNAME', 'MAIL_PASSWORD', 'MAIL_ENCRYPTION', 'MAIL_PORT', 'MAIL_FROM_EMAIL', 'MAIL_FROM_NAME', 'PAYMENT_CLIENT_ID', 'PAYMENT_SECRET_API_KEY', 'PAYMENT_CHECK_SUM_KEY', 'PAYMENT_RETURN_URL', 'PAYMENT_CANCEL_URL'];
+        foreach ($keysToCheck as $key) {
+            $val = getenv($key);
+            if ($val !== false && !isset($env[$key])) {
+                $env[$key] = $val;
+            }
         }
 
        $default = [
