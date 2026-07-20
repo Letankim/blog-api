@@ -51,8 +51,9 @@ class TurnstileMiddleware
         $responseData = json_decode($result, true);
 
         if (!$responseData || !isset($responseData['success']) || !$responseData['success']) {
+            $cfErrors = isset($responseData['error-codes']) ? implode(', ', $responseData['error-codes']) : 'unknown';
             error_log("TurnstileMiddleware: Token không hợp lệ. Response: " . $result);
-            return $this->jsonResponse(new Response(), 400, ['error' => 'Xác minh CAPTCHA thất bại, vui lòng thử lại']);
+            return $this->jsonResponse(new Response(), 400, ['error' => 'Xác minh CAPTCHA thất bại (' . $cfErrors . ')']);
         }
 
         return $handler->handle($request);
