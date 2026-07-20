@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\config\settings;
+use App\Config\settings;
 use Exception;
 use Firebase\JWT\JWT;
 use lbuchs\WebAuthn\WebAuthn;
@@ -16,7 +16,7 @@ class PasskeyModel extends BaseModel
     {
         parent::__construct();
 
-        $origin = settings::load()['APP_URL'] ?? 'http://localhost:8000';
+        $origin = Settings::load()['APP_URL'] ?? 'http://localhost:8000';
         $host   = parse_url($origin, PHP_URL_HOST) ?: 'localhost';
 
         $this->webauthn = new WebAuthn($this->rpName, $host);
@@ -30,7 +30,7 @@ public function startRegistration(string $userId, string $username, string $disp
         $userIdRaw = $userId;
     }
 
-    $rpId = parse_url(settings::load()['APP_URL'] ?? 'https://bc78430f1359.ngrok-free.app', PHP_URL_HOST);
+    $rpId = parse_url(Settings::load()['APP_URL'] ?? 'https://bc78430f1359.ngrok-free.app', PHP_URL_HOST);
 
     $challengeRaw = random_bytes(32);
     $challengeB64 = base64_encode($challengeRaw);
@@ -92,7 +92,7 @@ public function startRegistration(string $userId, string $username, string $disp
             }
         }
 
-        $rpId = parse_url(settings::load()['APP_URL'] ?? 'http://localhost:8000', PHP_URL_HOST) ?: 'localhost';
+        $rpId = parse_url(Settings::load()['APP_URL'] ?? 'http://localhost:8000', PHP_URL_HOST) ?: 'localhost';
         
         $challengeRaw = random_bytes(32);
         $challengeB64 = base64_encode($challengeRaw);
@@ -238,7 +238,7 @@ public function startRegistration(string $userId, string $username, string $disp
         ];
 
         $this->deleteChallenge($challengeB64);
-        $token = JWT::encode($payload, settings::load()['JWT_SECRET'], 'HS256');
+        $token = JWT::encode($payload, Settings::load()['JWT_SECRET'], 'HS256');
 
         return [
             'token'       => $token,

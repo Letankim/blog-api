@@ -6,7 +6,7 @@ use App\Models\OrderModel;
 use App\Models\UserModel;
 use App\Models\ChatSessionModel;
 use App\Models\VoucherModel;
-use App\config\settings;
+use App\Config\settings;
 use GuzzleHttp\Client;
 
 class AIService
@@ -31,7 +31,7 @@ class AIService
         $this->userModel = $userModel;
         $this->voucherModel = $voucherModel;
         $this->chatSessionModel = $chatSessionModel;
-        $this->apiKey = settings::get('GEMINI_API_KEY');
+        $this->apiKey = Settings::get('GEMINI_API_KEY');
         $this->client = new Client(['base_uri' => 'https://generativelanguage.googleapis.com/v1beta/']);
     }
 

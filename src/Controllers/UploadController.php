@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\config\settings;
+use App\Config\settings;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -15,9 +15,9 @@ class UploadController
     {
         $this->cloudinary = new Cloudinary([
             'cloud' => [
-                'cloud_name' => settings::get('CLOUDINARY_CLOUD_NAME'),
-                'api_key'    => settings::get('CLOUDINARY_API_KEY'),
-                'api_secret' => settings::get('CLOUDINARY_API_SECRET'),
+                'cloud_name' => Settings::get('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => Settings::get('CLOUDINARY_API_KEY'),
+                'api_secret' => Settings::get('CLOUDINARY_API_SECRET'),
             ],
         ]);
     }

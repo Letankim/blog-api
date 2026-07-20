@@ -3,7 +3,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use DI\Container;
-use App\config\settings;
+use App\Config\settings;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -13,9 +13,9 @@ $container = new Container();
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
-$container->set('settings', fn() => settings::load());
+$container->set('settings', fn() => Settings::load());
 $container->set('logger', function () {
-    $settings = settings::load();
+    $settings = Settings::load();
     $logger = new Logger('app');
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', $settings['LOG_LEVEL'] ?? Logger::DEBUG));
     return $logger;
@@ -28,7 +28,7 @@ $app->add(new App\Middleware\ErrorHandler($container->get('logger')));
 $app->get('/', function (Request $request, Response $response) {
     $dbStatus = 'Disconnected';
     try {
-        $db = \App\config\Database::getConnection();
+        $db = \App\Config\Database::getConnection();
         if ($db) {
             $dbStatus = 'Connected';
         }

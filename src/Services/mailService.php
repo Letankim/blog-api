@@ -3,7 +3,7 @@ namespace App\Services;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use App\Templates\EmailTemplate;
-use App\config\settings;
+use App\Config\settings;
 
 class MailService
 {
@@ -17,13 +17,13 @@ class MailService
 
     private function setupSMTP(): void
 {
-    $host       = settings::get('MAIL_HOST');
-    $username   = settings::get('MAIL_USERNAME');
-    $password   = settings::get('MAIL_PASSWORD');
-    $encryption = settings::get('MAIL_ENCRYPTION', 'tls');
-    $port       = settings::get('MAIL_PORT', 587);
-    $fromEmail  = settings::get('MAIL_FROM_EMAIL');  
-    $fromName   = settings::get('MAIL_FROM_NAME', '3DO Blog');
+    $host       = Settings::get('MAIL_HOST');
+    $username   = Settings::get('MAIL_USERNAME');
+    $password   = Settings::get('MAIL_PASSWORD');
+    $encryption = Settings::get('MAIL_ENCRYPTION', 'tls');
+    $port       = Settings::get('MAIL_PORT', 587);
+    $fromEmail  = Settings::get('MAIL_FROM_EMAIL');  
+    $fromName   = Settings::get('MAIL_FROM_NAME', '3DO Blog');
 
     if (empty($host) || empty($username) || empty($password) || empty($fromEmail)) {
         throw new \RuntimeException("Cấu hình email không đầy đủ. Kiểm tra .env (MAIL_*)");

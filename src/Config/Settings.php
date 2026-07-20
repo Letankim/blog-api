@@ -1,9 +1,9 @@
 <?php
-namespace App\config;
+namespace App\Config;
 
 use Dotenv\Dotenv;
 
-class settings
+class Settings
 {
     private static ?array $config = null;
 

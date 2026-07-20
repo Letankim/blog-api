@@ -2,7 +2,7 @@
 
 namespace App\Middleware;
 
-use App\config\settings;
+use App\Config\settings;
 use App\Models\UserModel;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
@@ -35,7 +35,7 @@ class AuthMiddleware
         }
 
         try {
-            $secret = settings::load()['JWT_SECRET'];
+            $secret = Settings::load()['JWT_SECRET'];
             $decoded = JWT::decode($token, new Key($secret, 'HS256'));
 
             $user = $this->userModel->getUserById($decoded->id);

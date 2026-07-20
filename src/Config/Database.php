@@ -1,5 +1,5 @@
 <?php
-namespace App\config;
+namespace App\Config;
 
 use PDO;
 use PDOException;
@@ -14,12 +14,12 @@ class Database
             return self::$pdo;
         }
 
-        $host = settings::get('DB_HOST', 'localhost');
-        $port = settings::get('DB_PORT', '4000');
-        $dbname = settings::get('DB_NAME', 'personal_blog_shop');
-        $user = settings::get('DB_USER', 'root');
-        $pass = settings::get('DB_PASS', '');
-        $charset = settings::get('DB_CHARSET', 'utf8mb4');
+        $host = Settings::get('DB_HOST', 'localhost');
+        $port = Settings::get('DB_PORT', '4000');
+        $dbname = Settings::get('DB_NAME', 'personal_blog_shop');
+        $user = Settings::get('DB_USER', 'root');
+        $pass = Settings::get('DB_PASS', '');
+        $charset = Settings::get('DB_CHARSET', 'utf8mb4');
 
         $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset={$charset}";
         $options = [
@@ -38,7 +38,7 @@ class Database
             $message = "Database Connection Failed: " . $e->getMessage();
             error_log($message);
 
-            if (settings::get('APP_ENV', 'development') === 'production') {
+            if (Settings::get('APP_ENV', 'development') === 'production') {
                 throw new PDOException("Không thể kết nối đến cơ sở dữ liệu.", 0, $e);
             }
 

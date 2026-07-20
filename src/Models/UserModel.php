@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Respect\Validation\Validator as v;
 use Firebase\JWT\JWT;
-use App\config\settings;
+use App\Config\settings;
 use App\Services\MailService;
 use PDO;
 use PDOStatement;
@@ -79,7 +79,7 @@ class UserModel extends BaseModel
     ]);
 
     if ($type === 'activation') {
-        $link = settings::load()['APP_URL'] . "/api/v1/users/activate/{$token}";
+        $link = Settings::load()['APP_URL'] . "/api/v1/users/activate/{$token}";
         $this->mailService->sendActivationEmail($email, $fullname, $link);
     } else {
         $this->mailService->sendOTPEmail($email, $fullname, $token);
@@ -150,7 +150,7 @@ public function login(array $data): array
         'role' => $user['role']
     ];
 
-    $token = JWT::encode($payload, settings::load()['JWT_SECRET'], 'HS256');
+    $token = JWT::encode($payload, Settings::load()['JWT_SECRET'], 'HS256');
 
     return [
         'token'       => $token,
@@ -396,7 +396,7 @@ private function generateUniqueUsername(string $base): string
             throw new \Exception('Không thể lưu file');
         }
 
-        $url = settings::load()['APP_URL'] . "/uploads/avatars/{$filename}";
+        $url = Settings::load()['APP_URL'] . "/uploads/avatars/{$filename}";
         $this->pdo->prepare("UPDATE users SET avatar_url = ? WHERE id = ?")
             ->execute([$url, $userId]);
 

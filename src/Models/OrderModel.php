@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-use App\config\settings;
+use App\Config\settings;
 use App\Services\NotificationService;
 use App\Services\PayOSService;
 use PDO;
@@ -412,9 +412,9 @@ public function createOrderWithPayment(array $input, string $paymentMethod): arr
                 break;
 
             case 'bank_transfer':
-                $clientId = settings::get('PAYOS.CLIENT_ID');
-                $apiKey = settings::get('PAYOS.API_KEY');
-                $checksumKey = settings::get('PAYOS.CHECKSUM_KEY');
+                $clientId = Settings::get('PAYOS.CLIENT_ID');
+                $apiKey = Settings::get('PAYOS.API_KEY');
+                $checksumKey = Settings::get('PAYOS.CHECKSUM_KEY');
 
                 try {
                     $payOSService = new PayOSService($clientId, $apiKey, $checksumKey);
@@ -430,8 +430,8 @@ public function createOrderWithPayment(array $input, string $paymentMethod): arr
                         items: $payOSItems,
                         orderCode: (int)$orderCode,
                         description: "Thanh toán đơn hàng #$orderCode",
-                        returnUrl: settings::get('PAYOS.RETURN_URL') . "?orderCode=$orderCode",
-                        cancelUrl: settings::get('PAYOS.CANCEL_URL') . "?orderCode=$orderCode"
+                        returnUrl: Settings::get('PAYOS.RETURN_URL') . "?orderCode=$orderCode",
+                        cancelUrl: Settings::get('PAYOS.CANCEL_URL') . "?orderCode=$orderCode"
                     );
 
                     if (str_starts_with($checkoutUrl, 'ERROR')) {
@@ -611,9 +611,9 @@ public function handlePaymentCallback(array $payOSData): array
         switch ($status) {
             case 'PAID':
                 $payOSService = new \App\Services\PayOSService(
-                    settings::get('PAYOS.CLIENT_ID'),
-                    settings::get('PAYOS.API_KEY'),
-                    settings::get('PAYOS.CHECKSUM_KEY')
+                    Settings::get('PAYOS.CLIENT_ID'),
+                    Settings::get('PAYOS.API_KEY'),
+                    Settings::get('PAYOS.CHECKSUM_KEY')
                 );
 
                 $payment = $payOSService->verifyPayment((int)$orderCode);

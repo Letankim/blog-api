@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\config\settings;
+use App\Config\settings;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\UserModel;
@@ -17,7 +17,7 @@ class UserController
 
     public function __construct()
     {
-        $settings = settings::load()['google_oauth'] ?? [];
+        $settings = Settings::load()['google_oauth'] ?? [];
         $this->model = new UserModel();
         $this->provider = new Google([
             'clientId'     => $settings['clientId'] ?? '',
