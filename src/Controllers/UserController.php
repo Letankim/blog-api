@@ -199,6 +199,13 @@ class UserController
             $result = $this->model->resendActivation($email);
             return $this->jsonResponse($response, 200, $result);
         } catch (\Exception $e) {
+            $decoded = json_decode($e->getMessage(), true);
+            if (is_array($decoded) && isset($decoded['expires_at'])) {
+                return $this->jsonResponse($response, 400, [
+                    'error' => $decoded['message'], 
+                    'expires_at' => $decoded['expires_at']
+                ]);
+            }
             return $this->jsonResponse($response, 400, ['error' => $e->getMessage()]);
         }
     }
@@ -247,6 +254,13 @@ class UserController
             $result = $this->model->forgotPassword($email);
             return $this->jsonResponse($response, 200, $result);
         } catch (\Exception $e) {
+            $decoded = json_decode($e->getMessage(), true);
+            if (is_array($decoded) && isset($decoded['expires_at'])) {
+                return $this->jsonResponse($response, 400, [
+                    'error' => $decoded['message'], 
+                    'expires_at' => $decoded['expires_at']
+                ]);
+            }
             return $this->jsonResponse($response, 400, ['error' => $e->getMessage()]);
         }
     }

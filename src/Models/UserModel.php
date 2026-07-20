@@ -122,6 +122,13 @@ class UserModel extends BaseModel
             throw new \Exception('Tài khoản không tồn tại hoặc đã được kích hoạt');
         }
 
+        $stmt2 = $this->pdo->prepare("SELECT expires_at FROM user_verifications WHERE user_id = ? AND type = 'activation' AND expires_at > NOW()");
+        $stmt2->execute([$user->id]);
+        $existing = $stmt2->fetch(PDO::FETCH_OBJ);
+        if ($existing) {
+            throw new \Exception(json_encode(['message' => 'Link kích hoạt cũ vẫn còn hiệu lực. Vui lòng kiểm tra lại email.', 'expires_at' => $existing->expires_at]));
+        }
+
         $this->createVerification($user->id, 'activation', $email, $user->username);
         return ['success' => 'Đã gửi lại link kích hoạt'];
     }
@@ -250,6 +257,13 @@ private function generateUniqueUsername(string $base): string
             throw new \Exception('Email không tồn tại');
         }
 
+        $stmt2 = $this->pdo->prepare("SELECT expires_at FROM user_verifications WHERE user_id = ? AND type = 'password_reset' AND expires_at > NOW()");
+        $stmt2->execute([$user->id]);
+        $existing = $stmt2->fetch(PDO::FETCH_OBJ);
+        if ($existing) {
+            throw new \Exception(json_encode(['message' => 'Mã OTP cũ vẫn còn hiệu lực. Vui lòng kiểm tra lại email.', 'expires_at' => $existing->expires_at]));
+        }
+
         $this->createVerification($user->id, 'password_reset', $email, $user->username);
         return ['success' => 'Đã gửi mã OTP đến email'];
     }
@@ -264,6 +278,13 @@ private function generateUniqueUsername(string $base): string
 
         if (!$user) {
             throw new \Exception('Người dùng không tồn tại');
+        }
+
+        $stmt2 = $this->pdo->prepare("SELECT expires_at FROM user_verifications WHERE user_id = ? AND type = 'password_reset' AND expires_at > NOW()");
+        $stmt2->execute([$user->id]);
+        $existing = $stmt2->fetch(PDO::FETCH_OBJ);
+        if ($existing) {
+            throw new \Exception(json_encode(['message' => 'Mã OTP cũ vẫn còn hiệu lực. Vui lòng kiểm tra lại email.', 'expires_at' => $existing->expires_at]));
         }
 
         $this->createVerification($user->id, 'password_reset', $user->email, $user->username);
