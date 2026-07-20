@@ -405,6 +405,10 @@ public function createOrderWithPayment(array $input, string $paymentMethod): arr
                 ->execute([$item['quantity'], $item['product_id']]);
         }
 
+        if (!empty($voucherId)) {
+            $this->incrementVoucherUsage($voucherId, $userId);
+        }
+
         $checkoutUrl = null;
 
         switch ($paymentMethod) {
@@ -571,6 +575,11 @@ private function incrementVoucherUsage(string $voucherId, string $userId): void
         ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$voucherId, $userId]);
+
+        $sql2 = "UPDATE vouchers SET uses_count = uses_count + 1 WHERE id = ?";
+        $stmt2 = $this->pdo->prepare($sql2);
+        $stmt2->execute([$voucherId]);
+
         error_log("Voucher usage incremented: voucher=$voucherId, user=$userId");
     } catch (\PDOException $e) {
         error_log("PDO error in incrementVoucherUsage: " . $e->getMessage() . " | SQL: " . $sql);
@@ -763,6 +772,14 @@ public function cancelOrder(string $orderId, string $userId): array
             }
         }
 
+        if (!empty($order['voucher_id'])) {
+            $this->pdo->prepare("DELETE FROM voucher_usage WHERE voucher_id = ? AND user_id = ?")
+                ->execute([$order['voucher_id'], $userId]);
+            
+            $this->pdo->prepare("UPDATE vouchers SET uses_count = GREATEST(0, uses_count - 1) WHERE id = ?")
+                ->execute([$order['voucher_id']]);
+        }
+
         $this->notificationModel->createNotification([
             'user_id' => $userId,
             'title' => 'Đơn hàng #' . $order['order_code'] . ' đã bị hủy',
@@ -879,6 +896,9 @@ private function rollbackPaymentFailure(array $order, string $newStatus): void
     if ($order['voucher_id']) {
         $this->pdo->prepare("DELETE FROM voucher_usage WHERE voucher_id = ? AND user_id = ?")
             ->execute([$order['voucher_id'], $order['user_id']]);
+
+        $this->pdo->prepare("UPDATE vouchers SET uses_count = GREATEST(0, uses_count - 1) WHERE id = ?")
+            ->execute([$order['voucher_id']]);
     }
 
     error_log("Rollback payment for order: {$order['id']} → status: $newStatus - stock restored, voucher usage removed");

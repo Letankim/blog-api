@@ -386,6 +386,19 @@ private function generateUniqueUsername(string $base): string
             throw new \Exception('Chỉ cho phép JPG, PNG, GIF');
         }
 
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+
+        $allowedMimes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!in_array($mimeType, $allowedMimes)) {
+            throw new \Exception('Định dạng file không hợp lệ (MIME Type không đúng)');
+        }
+
+        if (getimagesize($file['tmp_name']) === false) {
+            throw new \Exception('File tải lên không phải là hình ảnh hợp lệ');
+        }
+
         $uploadDir = __DIR__ . '/../../public/uploads/avatars/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 

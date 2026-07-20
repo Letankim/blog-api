@@ -31,11 +31,12 @@ class Settings
         $keysToCheck = [
             'APP_URL', 'APP_ENV', 'JWT_SECRET', 'LOG_LEVEL', 
             'DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_CHARSET', 
-            'ABLE_API_KEY', 'GEMINI_API_KEY', 
+            'ABLE_API_KEY', 'GEMINI_API_KEY', 'GROQ_API_KEY',
             'MAIL_HOST', 'MAIL_USERNAME', 'MAIL_PASSWORD', 'MAIL_ENCRYPTION', 'MAIL_PORT', 'MAIL_FROM_EMAIL', 'MAIL_FROM_NAME', 
             'PAYMENT_CLIENT_ID', 'PAYMENT_SECRET_API_KEY', 'PAYMENT_CHECK_SUM_KEY', 'PAYMENT_RETURN_URL', 'PAYMENT_CANCEL_URL',
             'CLOUDINARY_URL', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET',
-            'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'GOOGLE_REDIRECT_URI'
+            'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'GOOGLE_REDIRECT_URI',
+            'TURNSTILE_SECRET_KEY'
         ];
         
         $osEnv = getenv();
@@ -119,6 +120,7 @@ class Settings
             'DB_PASS'     => 'DB_PASS',
             'DB_CHARSET'  => 'DB_CHARSET',
             'ABLE_API_KEY'  => 'ABLE_API_KEY',
+            'TURNSTILE_SECRET_KEY' => 'TURNSTILE_SECRET_KEY',
         ];
 
        foreach ($generalMap as $envKey => $configKey) {

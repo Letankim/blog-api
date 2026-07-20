@@ -5,13 +5,13 @@ use Slim\Routing\RouteCollectorProxy;
 $app->group('/api/v1/users', function (RouteCollectorProxy $group) {
 
     // === PUBLIC APIs ===
-    $group->post('/register', UserController::class . ':register');
-    $group->post('/login', UserController::class . ':login');
+    $group->post('/register', UserController::class . ':register')->add(new \App\Middleware\TurnstileMiddleware());
+    $group->post('/login', UserController::class . ':login')->add(new \App\Middleware\TurnstileMiddleware());
     $group->get('/auth/google/url', [UserController::class, 'getLoginUrl']);
     $group->get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
     $group->get('/activate/{token}', UserController::class . ':activate');
     $group->post('/resend-activation', UserController::class . ':resendActivation');
-    $group->post('/forgot-password', UserController::class . ':forgotPassword');
+    $group->post('/forgot-password', UserController::class . ':forgotPassword')->add(new \App\Middleware\TurnstileMiddleware());
     $group->post('/reset-password', UserController::class . ':resetPassword');
 
     // === AUTHENTICATED USER APIs ===
