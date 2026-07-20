@@ -25,7 +25,7 @@ class Settings
                 error_log("Settings: Không thể load .env: " . $e->getMessage());
             }
         } else {
-            error_log("Settings: File .env không tồn tại tại: $envFile");
+            // In production (like Render), .env won't exist. This is expected.
         }
 
         $keysToCheck = [
