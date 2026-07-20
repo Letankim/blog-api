@@ -34,6 +34,13 @@ class UserController
                 return $this->jsonResponse($response, 400, ['error' => 'Dữ liệu không hợp lệ']);
             }
 
+            if (isset($data['email'])) {
+                $data['email'] = strtolower(trim($data['email']));
+            }
+            if (isset($data['password'])) {
+                $data['password'] = trim($data['password']);
+            }
+
             $result = $this->model->register($data);
             return $this->jsonResponse($response, 201, $result);
         } catch (ValidationException $e) {
@@ -165,6 +172,13 @@ class UserController
                 return $this->jsonResponse($response, 400, ['error' => 'Dữ liệu không hợp lệ']);
             }
 
+            if (isset($data['email'])) {
+                $data['email'] = strtolower(trim($data['email']));
+            }
+            if (isset($data['password'])) {
+                $data['password'] = trim($data['password']);
+            }
+
             $result = $this->model->login($data);
             return $this->jsonResponse($response, 200, $result);
         } catch (\Exception $e) {
@@ -250,6 +264,7 @@ class UserController
             if (!$email) {
                 return $this->jsonResponse($response, 400, ['error' => 'Thiếu email']);
             }
+            $email = strtolower(trim($email));
 
             $result = $this->model->forgotPassword($email);
             return $this->jsonResponse($response, 200, $result);
@@ -277,7 +292,11 @@ class UserController
                 }
             }
 
-            $result = $this->model->resetPassword($data['email'], $data['otp'], $data['new_password']);
+            $email = strtolower(trim($data['email']));
+            $otp = trim($data['otp']);
+            $newPassword = trim($data['new_password']);
+
+            $result = $this->model->resetPassword($email, $otp, $newPassword);
             return $this->jsonResponse($response, 200, $result);
         } catch (\Exception $e) {
             return $this->jsonResponse($response, 400, ['error' => $e->getMessage()]);
@@ -314,8 +333,11 @@ class UserController
                     return $this->jsonResponse($response, 400, ['error' => "Thiếu $field"]);
                 }
             }
+            
+            $otp = trim($data['otp']);
+            $newPassword = trim($data['new_password']);
 
-            $result = $this->model->changePasswordOtp($user->id, $data['otp'], $data['new_password']);
+            $result = $this->model->changePasswordOtp($user->id, $otp, $newPassword);
             return $this->jsonResponse($response, 200, $result);
         } catch (\Exception $e) {
             return $this->jsonResponse($response, 400, ['error' => $e->getMessage()]);
