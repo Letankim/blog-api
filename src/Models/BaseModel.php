@@ -244,11 +244,9 @@ protected function getAllWithPaginationAndFilter(
     $page    = max(1, (int)($params['page'] ?? 1));
     $perPage = min(100, max(1, (int)($params['limit'] ?? 10)));
     $offset  = ($page - 1) * $perPage;
-    $sql .= " LIMIT :limit OFFSET :offset";
+    $sql .= " LIMIT " . (int)$perPage . " OFFSET " . (int)$offset;
 
     $binds = array_merge($searchBinds, $this->extractBindsFromWhere($extraWhere, $params));
-    $binds[':limit'] = $perPage;
-    $binds[':offset'] = $offset;
 
     if (!empty($params['exclude_id'])) {
         $binds[':exclude_id'] = $params['exclude_id'];
