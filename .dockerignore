@@ -1,0 +1,9 @@
+.git
+.env
+firebase-service-account.json
+vendor/
+node_modules/
+tests/
+Dockerfile
+.dockerignore
+*.sql
