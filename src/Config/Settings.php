@@ -121,6 +121,8 @@ class Settings
             'DB_CHARSET'  => 'DB_CHARSET',
             'ABLE_API_KEY'  => 'ABLE_API_KEY',
             'TURNSTILE_SECRET_KEY' => 'TURNSTILE_SECRET_KEY',
+            'GROQ_API_KEY'  => 'GROQ_API_KEY',
+            'GEMINI_API_KEY' => 'GEMINI_API_KEY',
         ];
 
        foreach ($generalMap as $envKey => $configKey) {
