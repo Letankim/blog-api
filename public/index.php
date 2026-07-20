@@ -24,7 +24,7 @@ $container->set('logger', function () {
 
 $app->addBodyParsingMiddleware(); 
 $app->addRoutingMiddleware(); 
-$app->add(new App\Middleware\ErrorHandler($container->get('logger')));
+$app->add(new App\Middleware\ErrorHandler($container->get('logger'), true, true, true, 'development'));
 $app->add(new App\Middleware\CorsMiddleware()); 
 $app->get('/', function (Request $request, Response $response) {
     $dbStatus = 'Disconnected';
