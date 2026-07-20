@@ -154,7 +154,7 @@ class UserController
                         type: 'GOOGLE_LOGIN_SUCCESS',
                         token: " . json_encode($jwt) . ",
                         user: " . json_encode($result['user']) . "
-                    }, 'http://localhost:3000');
+                    }, '*');
                     window.close();
                 </script>";
                 $response->getBody()->write($script);

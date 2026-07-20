@@ -144,7 +144,15 @@ public function login(array $data): array
     $stmt->execute([$data['email']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$user || !password_verify($data['password'], $user['password_hash'])) {
+    if (!$user) {
+        error_log("Login failed: User not found for email: " . $data['email']);
+        throw new \Exception('Email hoặc mật khẩu không chính xác');
+    }
+
+    $isValid = password_verify($data['password'], $user['password_hash']);
+    error_log("Login attempt for email: " . $data['email'] . " | Hash in DB: " . $user['password_hash'] . " | isValid: " . ($isValid ? 'true' : 'false'));
+
+    if (!$isValid) {
         throw new \Exception('Email hoặc mật khẩu không chính xác');
     }
 
