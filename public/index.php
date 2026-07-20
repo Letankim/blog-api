@@ -25,6 +25,29 @@ $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware(); 
 $app->add(new App\Middleware\CorsMiddleware()); 
 $app->add(new App\Middleware\ErrorHandler($container->get('logger')));
+$app->get('/', function (Request $request, Response $response) {
+    $dbStatus = 'Disconnected';
+    try {
+        $db = \App\config\Database::getConnection();
+        if ($db) {
+            $dbStatus = 'Connected';
+        }
+    } catch (\Exception $e) {
+        $dbStatus = 'Error: ' . $e->getMessage();
+    }
+    
+    $data = [
+        'status' => 'success',
+        'server' => 'Running',
+        'database' => $dbStatus,
+        'message' => 'Welcome to Personal Blog Shop API',
+        'timestamp' => date('Y-m-d H:i:s')
+    ];
+    
+    $response->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE));
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+});
+
 require_once __DIR__ . '/../src/routes/api.php';
 
 $app->run();

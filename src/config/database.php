@@ -15,16 +15,19 @@ class Database
         }
 
         $host = settings::get('DB_HOST', 'localhost');
+        $port = settings::get('DB_PORT', '4000');
         $dbname = settings::get('DB_NAME', 'personal_blog_shop');
         $user = settings::get('DB_USER', 'root');
         $pass = settings::get('DB_PASS', '');
         $charset = settings::get('DB_CHARSET', 'utf8mb4');
 
-        $dsn = "mysql:host={$host};dbname={$dbname};charset={$charset}";
+        $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset={$charset}";
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::MYSQL_ATTR_SSL_CA       => __DIR__ . '/cacert.pem',
+            PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
         ];
 
         try {
