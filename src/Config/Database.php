@@ -33,6 +33,7 @@ class Database
         try {
             self::$pdo = new PDO($dsn, $user, $pass, $options);
             self::$pdo->exec("SET time_zone = '+07:00';");
+            self::$pdo->exec("SET SESSION sql_mode = REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', '');");
             return self::$pdo;
         } catch (PDOException $e) {
             $message = "Database Connection Failed: " . $e->getMessage();
