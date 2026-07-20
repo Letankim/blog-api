@@ -14,6 +14,12 @@ class TurnstileMiddleware
         $parsedBody = $request->getParsedBody();
         $token = $parsedBody['turnstileToken'] ?? $parsedBody['cf-turnstile-response'] ?? null;
 
+        if (is_array($parsedBody)) {
+            unset($parsedBody['turnstileToken']);
+            unset($parsedBody['cf-turnstile-response']);
+            $request = $request->withParsedBody($parsedBody);
+        }
+
         if (!$token) {
             return $this->jsonResponse(new Response(), 400, ['error' => 'Vui lòng xác nhận CAPTCHA']);
         }
