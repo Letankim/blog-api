@@ -12,7 +12,7 @@ class TurnstileMiddleware
     public function __invoke(Request $request, Handler $handler): \Psr\Http\Message\ResponseInterface
     {
         $parsedBody = $request->getParsedBody();
-        $token = $parsedBody['cf-turnstile-response'] ?? null;
+        $token = $parsedBody['turnstileToken'] ?? $parsedBody['cf-turnstile-response'] ?? null;
 
         if (!$token) {
             return $this->jsonResponse(new Response(), 400, ['error' => 'Vui lòng xác nhận CAPTCHA']);
