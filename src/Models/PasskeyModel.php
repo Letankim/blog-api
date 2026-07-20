@@ -12,14 +12,16 @@ class PasskeyModel extends BaseModel
     private WebAuthn $webauthn;
     private string $rpName = 'My Blog Shop';
 
+    private function getRpId(): string
+    {
+        $frontendUrl = $_SERVER['HTTP_ORIGIN'] ?? Settings::load()['FRONTEND_URL'] ?? Settings::load()['APP_URL'] ?? 'http://localhost:3000';
+        return parse_url($frontendUrl, PHP_URL_HOST) ?: 'localhost';
+    }
+
     public function __construct()
     {
         parent::__construct();
-
-        $origin = Settings::load()['APP_URL'] ?? 'http://localhost:8000';
-        $host   = parse_url($origin, PHP_URL_HOST) ?: 'localhost';
-
-        $this->webauthn = new WebAuthn($this->rpName, $host);
+        $this->webauthn = new WebAuthn($this->rpName, $this->getRpId());
     }
 
 public function startRegistration(string $userId, string $username, string $displayName = ''): array
@@ -30,7 +32,7 @@ public function startRegistration(string $userId, string $username, string $disp
         $userIdRaw = $userId;
     }
 
-    $rpId = parse_url(Settings::load()['APP_URL'] ?? 'https://bc78430f1359.ngrok-free.app', PHP_URL_HOST);
+    $rpId = $this->getRpId();
 
     $challengeRaw = random_bytes(32);
     $challengeB64 = base64_encode($challengeRaw);
@@ -92,7 +94,7 @@ public function startRegistration(string $userId, string $username, string $disp
             }
         }
 
-        $rpId = parse_url(Settings::load()['APP_URL'] ?? 'http://localhost:8000', PHP_URL_HOST) ?: 'localhost';
+        $rpId = $this->getRpId();
         
         $challengeRaw = random_bytes(32);
         $challengeB64 = base64_encode($challengeRaw);
