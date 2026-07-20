@@ -16,16 +16,25 @@ class NotificationService
     public function __construct()
     {
         $serviceAccountPath = __DIR__ . "/../../firebase-service-account.json";
+        $envCreds = getenv('FIREBASE_CREDENTIALS');
 
-        $this->config = json_decode(file_get_contents($serviceAccountPath), true);
+        if (file_exists($serviceAccountPath)) {
+            $this->config = json_decode(file_get_contents($serviceAccountPath), true) ?? [];
+        } elseif ($envCreds) {
+            $this->config = json_decode($envCreds, true) ?? [];
+        } else {
+            $this->config = [];
+        }
 
-        $this->projectId = $this->config['project_id'];
-        $this->baseUrl   = "https://firestore.googleapis.com/v1/projects/{$this->projectId}/databases/(default)/documents";
-
-        $this->auth = new ServiceAccountCredentials(
-            ['https://www.googleapis.com/auth/datastore'],
-            $serviceAccountPath
-        );
+        $this->projectId = $this->config['project_id'] ?? '';
+        
+        if (!empty($this->projectId)) {
+            $this->baseUrl   = "https://firestore.googleapis.com/v1/projects/{$this->projectId}/databases/(default)/documents";
+            $this->auth = new ServiceAccountCredentials(
+                ['https://www.googleapis.com/auth/datastore'],
+                $this->config
+            );
+        }
 
         $this->client = new Client();
     }
@@ -43,6 +52,7 @@ class NotificationService
 
     public function send(string $userId, string $type, array $message = [])
     {
+        if (empty($this->projectId)) return;
         $url = $this->firestoreUrl("notifications");
 
         $data = [
@@ -67,6 +77,7 @@ class NotificationService
 
     public function sendToAdminChannel(string $type, array $message = [])
     {
+        if (empty($this->projectId)) return;
         $url = $this->firestoreUrl("notifications_admin");
 
         $data = [
@@ -92,6 +103,7 @@ class NotificationService
 
      public function sendOrderToGuestChannel(string $type, array $message = [])
     {
+        if (empty($this->projectId)) return;
         $url = $this->firestoreUrl("notifications_order_marketings");
 
         $data = [
@@ -159,6 +171,7 @@ private function isAssoc(array $arr)
 
     public function markAsRead(string $documentId, bool $isAdmin = false)
     {
+        if (empty($this->projectId)) return;
         $collection = $isAdmin ? "notifications_admin" : "notifications";
         $url = "{$this->baseUrl}/{$collection}/{$documentId}?updateMask.fieldPaths=read";
 
