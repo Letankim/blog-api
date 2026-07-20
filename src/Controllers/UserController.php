@@ -172,8 +172,12 @@ class UserController
                 return $this->jsonResponse($response, 400, ['error' => 'Dữ liệu không hợp lệ']);
             }
 
+            // --- DEBUG LOGGING ---
+            error_log("LOGIN PAYLOAD: " . json_encode($data));
+            // ---------------------
+
             if (isset($data['email'])) {
-                $data['email'] = strtolower(trim($data['email']));
+                $data['email'] = trim($data['email']);
             }
             if (isset($data['password'])) {
                 $data['password'] = trim($data['password']);
@@ -264,7 +268,7 @@ class UserController
             if (!$email) {
                 return $this->jsonResponse($response, 400, ['error' => 'Thiếu email']);
             }
-            $email = strtolower(trim($email));
+            $email = trim($email);
 
             $result = $this->model->forgotPassword($email);
             return $this->jsonResponse($response, 200, $result);
@@ -292,9 +296,13 @@ class UserController
                 }
             }
 
-            $email = strtolower(trim($data['email']));
+            $email = trim($data['email']);
             $otp = trim($data['otp']);
             $newPassword = trim($data['new_password']);
+
+            // --- DEBUG LOGGING ---
+            error_log("RESET PW PAYLOAD: email=$email, otp=$otp, new_password_len=" . strlen($newPassword));
+            // ---------------------
 
             $result = $this->model->resetPassword($email, $otp, $newPassword);
             return $this->jsonResponse($response, 200, $result);
